@@ -1,20 +1,53 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+//Components
+import Header from './components/input';
+import Todo from './components/todo';
+
+//Other Stuff
+import { Button, StyleSheet, Text, View, TextInput, FlatList } from 'react-native';
+import { useState } from 'react';
+
 
 export default function App() {
+
+  const [todos, setTodos] = useState([
+    { text: 'Get coffee', key: '1'},
+    { text: 'Create an app', key: '2'},
+    { text: 'Program', key: '3'},
+  ])
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <Header header={"ToDo Header"}/>
+      <View style={styles.content}>
+        {/*Input form*/}
+
+        <View style={styles.list}>
+
+          <FlatList
+            data={todos}
+            renderItem={ ({item}) => (
+              <Todo item={item} />
+            )}
+          />
+
+        </View>
+
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+
+  }, 
+  content: {
+    padding: 40,
+  },
+  list: {
+    marginTop: 20,
   },
 });
