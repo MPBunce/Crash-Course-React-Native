@@ -1,11 +1,10 @@
 //Components
 import Header from './components/input';
 import Todo from './components/todo';
-
+import AddTodo from './components/addTodo';
 //Other Stuff
-import { Button, StyleSheet, Text, View, TextInput, FlatList } from 'react-native';
+import { Button, StyleSheet, Keyboard, Text, View, TextInput, FlatList, TouchableWithoutFeedback } from 'react-native';
 import { useState } from 'react';
-
 
 export default function App() {
 
@@ -15,25 +14,44 @@ export default function App() {
     { text: 'Program', key: '3'},
   ])
 
+  const submitHandler = (text: any) => {
+    setTodos( (prevTodos) => {
+      return [
+        {text: text, key: Math.random().toString()},
+        ...prevTodos
+      ]
+    })
+  }
+
+  const pressHandler = (key: any) => {
+    setTodos( (prevTodos) => {
+      return prevTodos.filter( todo => todo.key != key);
+    })
+  }
+
   return (
-    <View style={styles.container}>
-      <Header header={"ToDo Header"}/>
-      <View style={styles.content}>
-        {/*Input form*/}
+    <TouchableWithoutFeedback onPress={ ()=> {
+      Keyboard.dismiss()
+    }}>
+      <View style={styles.container}>
+        <Header header={"ToDo Header"}/>
+        <View style={styles.content}>
+          <AddTodo submitHandler={ submitHandler }/>
 
-        <View style={styles.list}>
+          <View style={styles.list}>
 
-          <FlatList
-            data={todos}
-            renderItem={ ({item}) => (
-              <Todo item={item} />
-            )}
-          />
+            <FlatList
+              data={todos}
+              renderItem={ ({item}) => (
+                <Todo item={item} pressHandler={ pressHandler }/>
+              )}
+            />
+
+          </View>
 
         </View>
-
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
